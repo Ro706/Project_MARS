@@ -1,6 +1,6 @@
 # Project M.A.R.S. (Multi-source Augmented RAG System)
 
-Project M.A.R.S. is an intelligent chatbot application that leverages Retrieval-Augmented Generation (RAG) to provide answers based on specific web content provided by the user. Unlike general-purpose LLMs, M.A.R.S. can be "taught" new information from a URL, making it a powerful tool for domain-specific queries.
+Project M.A.R.S. is an intelligent chatbot application that leverages Retrieval-Augmented Generation (RAG) to provide answers based on specific web content dynamically retrieved from the web based on the user's query. Unlike general-purpose LLMs, M.A.R.S. can be "taught" new information from a URL, making it a powerful tool for domain-specific queries.
 
 ## How it is better than current LLMs
 
@@ -30,14 +30,16 @@ Here is the flow of how the application works:
 |      (React)        |      |        Backend       |      |      (RAG Core)     |
 +---------------------+      +----------------------+      +---------------------+
           |                            |                             |
-          | 1. User provides URL       |                             |
-          |--------------------------->| 2. Scrape & Embed           |
-          |                            |---------------------------->| 3. Scrape URL content
+          | 1. User sends query        |                             |
+          |--------------------------->| 2. Backend extracts URL     |
+          |                            |    from query (Serper tool) |
+          |                            |--------------------------->|
+          |                            | 3. Scrape & Embed           |
+          |                            |---------------------------->| 4. Scrape URL content
           |                            |                             |    & create embeddings
           |                            |                             |    & store them.
           |                            |                             |
-          | 4. User sends a message    |                             |
-          |--------------------------->| 5. Query RAG                |
+          |                            | 5. Query RAG                |
           |                            |---------------------------->| 6. Retrieve relevant
           |                            |                             |    context from stored
           |                            |                             |    embeddings and
