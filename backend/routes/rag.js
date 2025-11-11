@@ -13,15 +13,41 @@ router.post('/query', (req, res) => {
 
     const pythonProcess = spawn('python', [path.join(__dirname, '..', 'node', 'rag_query.py')]);
 
-    let stdout = '';
+    let stdoutBuffer = '';
     let stderr = '';
+    let finalAnswer = null;
+    let rewardScore = null;
 
     pythonProcess.stdin.write(query);
     pythonProcess.stdin.end();
 
     pythonProcess.stdout.on('data', (data) => {
-        console.log('Python stdout:', data.toString());
-        stdout += data.toString();
+        stdoutBuffer += data.toString();
+        let newlineIndex;
+        while ((newlineIndex = stdoutBuffer.indexOf('\n')) !== -1) {
+            const line = stdoutBuffer.substring(0, newlineIndex).trim();
+            stdoutBuffer = stdoutBuffer.substring(newlineIndex + 1);
+
+            if (line) {
+                // Only attempt to parse as JSON if it looks like JSON
+                if (line.startsWith('{') && line.endsWith('}')) {
+                    try {
+                        const jsonMessage = JSON.parse(line);
+                        if (jsonMessage.type === "final_answer") {
+                            finalAnswer = jsonMessage.answer;
+                        } else if (jsonMessage.type === "reward_score") {
+                            rewardScore = jsonMessage.score;
+                        }
+                    } catch (e) {
+                        // If JSON parsing fails, log it but don't treat as process update
+                        console.log('Python stdout (malformed JSON or non-JSON):', line);
+                    }
+                } else {
+                    // Log non-JSON lines but don't treat as process update
+                    console.log('Python stdout (non-JSON):', line);
+                }
+            }
+        }
     });
 
     pythonProcess.stderr.on('data', (data) => {
@@ -36,22 +62,12 @@ router.post('/query', (req, res) => {
             return res.status(500).json({ error: 'Failed to process query', details: stderr });
         }
 
-        try {
-            const answerMatch = stdout.match(/LLM Answer:\s*([\s\S]*?)\s*Reward Score/);
-            const rewardMatch = stdout.match(/Reward Score \(semantic alignment\):\s*([0-9.]+)/);
-
-            if (answerMatch && rewardMatch) {
-                const answer = answerMatch[1].trim();
-                const rewardScore = parseFloat(rewardMatch[1].trim());
-                console.log('Successfully parsed output:', { answer, rewardScore });
-                res.json({ answer, reward_score: rewardScore });
-            } else {
-                console.error('Failed to parse Python script output. Full output:', stdout);
-                res.status(500).json({ error: 'Failed to parse Python script output' });
-            }
-        } catch (error) {
-            console.error('Error parsing Python script output:', error);
-            res.status(500).json({ error: 'Failed to parse Python script output' });
+        if (finalAnswer !== null && rewardScore !== null) {
+            console.log('Successfully processed query:', { finalAnswer, rewardScore });
+            res.json({ answer: finalAnswer, reward_score: rewardScore });
+        } else {
+            console.error('Failed to get final answer or reward score from Python script. Full stdout buffer:', stdoutBuffer);
+            res.status(500).json({ error: 'Failed to parse Python script output', details: stdoutBuffer });
         }
     });
 });

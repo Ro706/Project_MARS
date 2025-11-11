@@ -21,8 +21,14 @@ const ChatArea = ({ onSendMessage, messages, setMessages }) => {
         const token = localStorage.getItem('token');
         if (!token || currentMessages.length === 0) return;
 
+        // Ensure all timestamps are in ISO 8601 format before saving
+        const messagesToSave = currentMessages.map(msg => ({
+            ...msg,
+            timestamp: msg.timestamp ? new Date(msg.timestamp).toISOString() : new Date().toISOString()
+        }));
+
         try {
-            await axios.post('http://localhost:5800/api/chat/save', { messages: currentMessages }, {
+            await axios.post('http://localhost:5800/api/chat/save', { messages: messagesToSave }, {
                 headers: {
                     'auth-token': token,
                 },
@@ -42,13 +48,14 @@ const ChatArea = ({ onSendMessage, messages, setMessages }) => {
                     'auth-token': token,
                 },
             });
-            const { answer, reward_score } = response.data;
-            const formattedRewardScore = (reward_score * 100).toFixed(2); // Multiply by 100 and format
-            const botMessage = { text: `${answer}\n\nReward Score: ${formattedRewardScore}%`, sender: 'bot' };
+            const { answer, reward_score } = response.data; // Removed processUpdates
+
+            const formattedRewardScore = (reward_score * 100).toFixed(2);
+            const botMessage = { text: `${answer}\n\nReward Score: ${formattedRewardScore}%`, sender: 'bot', timestamp: new Date().toISOString() };
             setMessages((prevMessages) => [...prevMessages, botMessage]);
         } catch (error) {
             console.error('Error fetching response:', error);
-            const errorMessage = { text: 'Sorry, something went wrong.', sender: 'bot' };
+            const errorMessage = { text: 'Sorry, something went wrong.', sender: 'bot', timestamp: new Date().toISOString() };
             setMessages((prevMessages) => [...prevMessages, errorMessage]);
         } finally {
             setLoading(false);
@@ -58,21 +65,20 @@ const ChatArea = ({ onSendMessage, messages, setMessages }) => {
     useEffect(() => {
         if (onSendMessage) {
             onSendMessage.current = (query) => {
-                const newMessage = { text: query, sender: 'user' };
+                const newMessage = { text: query, sender: 'user', timestamp: new Date().toISOString() };
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
                 fetchResponse(query);
             };
         }
-    }, [onSendMessage, setMessages]); // Added setMessages to dependency array
+    }, [onSendMessage, setMessages]);
 
-    // This effect runs when the component unmounts or when a new chat is initiated
     useEffect(() => {
         return () => {
             if (messages.length > 0) {
                 saveChat(messages);
             }
         };
-    }, [messages]); // Dependency on messages to ensure latest state is captured
+    }, [messages]);
 
     return (
         <div className="chat-area">

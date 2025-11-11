@@ -36,23 +36,26 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 query = sys.stdin.read().strip()
 
 # ======== STEP 3: DYNAMIC DATA INGESTION (Search, Scrape, Embed, Upsert) ========
-print(f"Dynamically searching for: {query}")
+print(f"Searching for relevant information for: '{query}'")
 search_results = search_serper(query, num_results=5) # Get top 5 results
 
 dynamic_vectors = []
 dynamic_contexts = []
 vector_id_counter = 0 # To ensure unique IDs for dynamically added vectors
 
+if not search_results:
+    print("No search results found. Proceeding with existing knowledge.")
+
 for result in search_results:
     url = result.get('link')
     title = result.get('title')
     snippet = result.get('snippet')
 
-    print(f"Dynamically scraping: {title} ({url})")
+    print(f"Scraping content from: '{title}' ({url})")
     content = scrape_webpage(url)
 
     if len(content) < 200:
-        print(f"Skipping {url} — content too short")
+        print(f"Skipping '{url}' — content too short.")
         continue
 
     text_to_embed = content[:4000] # Truncate for embedding
@@ -72,19 +75,25 @@ for result in search_results:
     vector_id_counter += 1
 
 if dynamic_vectors:
+    print(f"Embedding and storing {len(dynamic_vectors)} new documents in Pinecone.")
     index.upsert(vectors=dynamic_vectors)
-    print(f"Uploaded {len(dynamic_vectors)} dynamic documents to Pinecone.")
+    print(f"Successfully updated knowledge base with new information.")
 else:
-    print("No dynamic documents to upload.")
+    print("No new documents to embed and upload.")
 
 # ======== STEP 4: EMBED THE QUESTION ========
+print("Embedding user query.")
 query_emb = embedder.encode(query).tolist()
 
 # ======== STEP 5: RETRIEVE SIMILAR DOCUMENTS (including newly added) ========
+print("Retrieving most relevant documents from knowledge base.")
 results = index.query(vector=query_emb, top_k=5, include_metadata=True) # Increased top_k
 
 context_texts = []
 retrieved_contexts = []
+
+if not results["matches"]:
+    print("No relevant documents found in knowledge base.")
 
 for match in results["matches"]:
     meta = match["metadata"]
@@ -109,6 +118,7 @@ Question: {query}
 """
 
 # ======== STEP 7: GENERATE LLM RESPONSE ======== 
+print("Generating response using Groq LLM.")
 try:
     response = groq_client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -116,8 +126,9 @@ try:
     )
 
     answer = response.choices[0].message.content.strip()
-    print("\n LLM Answer:")
-    print(answer)
+    print("LLM response generated.")
+    # Final answer and reward score will be printed in a specific format for Node.js to parse
+    print(json.dumps({"type": "final_answer", "answer": answer}))
 
 except Exception as e:
     print(f"Error generating answer: {e}")
@@ -135,7 +146,7 @@ def compute_reward(answer_text, contexts):
     return round(float(similarity), 3)
 
 reward_score = compute_reward(answer, retrieved_contexts)
-print(f"\n Reward Score (semantic alignment): {reward_score}")
+print(json.dumps({"type": "reward_score", "score": reward_score}))
 
 # ======== STEP 9: LOG REWARD MEMORY ========
 def log_reward(query, contexts, answer, reward, log_file=os.path.join(os.path.dirname(__file__), 'reward_memory.json')):
