@@ -1,9 +1,11 @@
 import requests
 import dotenv
 import json
+import sys
 
 dotenv.load_dotenv()
 SERPER_API_KEY = dotenv.get_key(dotenv.find_dotenv(), 'SERPER_API_KEY')
+
 def search_serper(query, num_results=5):
     """
     Perform a Google-style search via Serper.dev API
@@ -38,10 +40,3 @@ def search_serper(query, num_results=5):
         })
 
     return results
-
-
-if __name__ == "__main__":
-    query = "latest trends in reinforcement learning 2025"
-    search_results = search_serper(query)
-
-    print(json.dumps(search_results, indent=2))

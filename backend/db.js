@@ -1,8 +1,9 @@
 
-require('dotenv').config();
+require('dotenv').config({ path: './backend/.env' });
 const mongoose = require('mongoose');
 
 const mongoURI = process.env.MONGO_URI;
+console.log('mongoURI:', mongoURI);
 
 const connectToMongo = async () => {
   try {

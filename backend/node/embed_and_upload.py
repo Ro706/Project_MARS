@@ -13,15 +13,19 @@ PINECONE_API_KEY = dotenv.get_key(dotenv.find_dotenv(), "PINECONE_API_KEY")
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index_name = "rag-knowledge-384"
 
-# Create Pinecone index if it doesn’t exist
-if index_name not in [i.name for i in pc.list_indexes()]:
-    pc.create_index(
-        name=index_name,
-        dimension=384,  # Hugging Face MiniLM outputs 384-dim embeddings
-        metric="cosine",
-        spec=ServerlessSpec(cloud="aws", region="us-east-1")
-    )
-    print(f"Created Pinecone index: {index_name}")
+# Delete Pinecone index if it exists
+if index_name in [i.name for i in pc.list_indexes()]:
+    pc.delete_index(index_name)
+    print(f"Deleted existing Pinecone index: {index_name}")
+
+# Create Pinecone index
+pc.create_index(
+    name=index_name,
+    dimension=384,  # Hugging Face MiniLM outputs 384-dim embeddings
+    metric="cosine",
+    spec=ServerlessSpec(cloud="aws", region="us-east-1")
+)
+print(f"Created Pinecone index: {index_name}")
 
 index = pc.Index(index_name)
 print(f"Connected to Pinecone index: {index_name}")

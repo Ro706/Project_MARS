@@ -1,10 +1,15 @@
 import json
 import dotenv
 from sentence_transformers import SentenceTransformer, util
-from pinecone import Pinecone
+from pinecone import Pinecone, ServerlessSpec
 import os
 from groq import Groq
 from datetime import datetime
+import sys
+
+# Import search and scrape functions
+from searchurl import search_serper
+from webscrap import scrape_webpage
 
 # ======== STEP 1: SETUP ========
 dotenv.load_dotenv()
@@ -12,21 +17,72 @@ PINECONE_API_KEY = dotenv.get_key(dotenv.find_dotenv(), "PINECONE_API_KEY")
 GROQ_API_KEY = dotenv.get_key(dotenv.find_dotenv(), "GROQ_API_KEY")
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index("rag-knowledge-384")
+index_name = "rag-knowledge-384"
+
+# Ensure Pinecone index exists (or create it if not)
+if index_name not in [i.name for i in pc.list_indexes()]:
+    pc.create_index(
+        name=index_name,
+        dimension=384,  # Hugging Face MiniLM outputs 384-dim embeddings
+        metric="cosine",
+        spec=ServerlessSpec(cloud="aws", region="us-east-1")
+    )
+index = pc.Index(index_name)
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 groq_client = Groq(api_key=GROQ_API_KEY)
 
 # ======== STEP 2: GET USER QUESTION ========
-query = input("Ask a question about your data: ")
+query = sys.stdin.read().strip()
 
-# ======== STEP 3: EMBED THE QUESTION ========
+# ======== STEP 3: DYNAMIC DATA INGESTION (Search, Scrape, Embed, Upsert) ========
+print(f"Dynamically searching for: {query}")
+search_results = search_serper(query, num_results=5) # Get top 5 results
+
+dynamic_vectors = []
+dynamic_contexts = []
+vector_id_counter = 0 # To ensure unique IDs for dynamically added vectors
+
+for result in search_results:
+    url = result.get('link')
+    title = result.get('title')
+    snippet = result.get('snippet')
+
+    print(f"Dynamically scraping: {title} ({url})")
+    content = scrape_webpage(url)
+
+    if len(content) < 200:
+        print(f"Skipping {url} — content too short")
+        continue
+
+    text_to_embed = content[:4000] # Truncate for embedding
+    emb = embedder.encode(text_to_embed).tolist()
+
+    dynamic_vectors.append({
+        "id": f"dynamic-{vector_id_counter}", # Unique ID for dynamic vectors
+        "values": emb,
+        "metadata": {
+            "title": title,
+            "url": url,
+            "snippet": snippet,
+            "query": query # Associate with the current user query
+        }
+    })
+    dynamic_contexts.append(f"{title}: {snippet}")
+    vector_id_counter += 1
+
+if dynamic_vectors:
+    index.upsert(vectors=dynamic_vectors)
+    print(f"Uploaded {len(dynamic_vectors)} dynamic documents to Pinecone.")
+else:
+    print("No dynamic documents to upload.")
+
+# ======== STEP 4: EMBED THE QUESTION ========
 query_emb = embedder.encode(query).tolist()
 
-# ======== STEP 4: RETRIEVE SIMILAR DOCUMENTS ========
-results = index.query(vector=query_emb, top_k=3, include_metadata=True)
+# ======== STEP 5: RETRIEVE SIMILAR DOCUMENTS (including newly added) ========
+results = index.query(vector=query_emb, top_k=5, include_metadata=True) # Increased top_k
 
-print("\n🔍 Retrieved Contexts:")
 context_texts = []
 retrieved_contexts = []
 
@@ -36,16 +92,15 @@ for match in results["matches"]:
     title = meta.get("title", "No Title")
     url = meta.get("url", "No URL")
 
-    print(f"- {title} ({url})")
-    print(f"  Snippet: {snippet[:200]}...\n")
-
     retrieved_contexts.append({"title": title, "url": url, "snippet": snippet})
     context_texts.append(f"{title}: {snippet}")
 
-# ======== STEP 5: BUILD CONTEXT ========
+# ======== STEP 6: BUILD CONTEXT FOR LLM ========
 context = "\n\n".join(context_texts)
 prompt = f"""
-Use the following knowledge to answer the question factually, concisely, and based on real data.
+Based on the following context, generate a comprehensive and coherent answer to the question.
+Integrate the information smoothly and avoid simply quoting the context directly.
+Your response should be factual, concise, and derived solely from the provided data.
 
 Context:
 {context}
@@ -53,7 +108,7 @@ Context:
 Question: {query}
 """
 
-# ======== STEP 6: GENERATE LLM RESPONSE ========
+# ======== STEP 7: GENERATE LLM RESPONSE ======== 
 try:
     response = groq_client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -68,7 +123,7 @@ except Exception as e:
     print(f"Error generating answer: {e}")
     answer = None
 
-# ======== STEP 7: COMPUTE REWARD SIGNAL ========
+# ======== STEP 8: COMPUTE REWARD SIGNAL ======== 
 def compute_reward(answer_text, contexts):
     """Compute semantic similarity between the answer and retrieved context."""
     if not answer_text or not contexts:
@@ -82,8 +137,8 @@ def compute_reward(answer_text, contexts):
 reward_score = compute_reward(answer, retrieved_contexts)
 print(f"\n Reward Score (semantic alignment): {reward_score}")
 
-# ======== STEP 8: LOG REWARD MEMORY ========
-def log_reward(query, contexts, answer, reward, log_file="backend/node/reward_memory.json"):
+# ======== STEP 9: LOG REWARD MEMORY ========
+def log_reward(query, contexts, answer, reward, log_file=os.path.join(os.path.dirname(__file__), 'reward_memory.json')):
     entry = {
         "query": query,
         "contexts": [c["url"] for c in contexts],
@@ -103,8 +158,6 @@ def log_reward(query, contexts, answer, reward, log_file="backend/node/reward_me
 
     with open(log_file, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
-
-    print(f"Logged reward data to {log_file}")
 
 # Save to log
 if answer:

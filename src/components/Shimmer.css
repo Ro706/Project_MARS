@@ -1,0 +1,39 @@
+.shimmer-wrapper {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.shimmer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background-color: #1e293b;
+}
+
+.shimmer-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.shimmer-line {
+    height: 0.5rem;
+    background-color: #1e293b;
+    border-radius: 0.25rem;
+}
+
+.shimmer-line.short {
+    width: 75%;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

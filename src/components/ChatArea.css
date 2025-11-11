@@ -1,0 +1,25 @@
+.chat-area {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #0f172a;
+    display: flex;
+    flex-direction: column-reverse;
+    border: 1px solid #334155; /* Black and white border */
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .chat-area {
+        padding: 0.5rem;
+    }
+
+    .chat-messages {
+        gap: 0.5rem;
+    }
+}

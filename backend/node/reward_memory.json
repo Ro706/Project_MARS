@@ -9,5 +9,174 @@
     "answer": "In 2025, the trend of Reinforcement Learning (RL) is promising, with an industry size of over $122 billion and applications in various fields such as robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming.",
     "reward_score": 0.908,
     "timestamp": "2025-11-11T03:28:16.516736"
+  },
+  {
+    "query": "tell me about LLM latest update",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://mobidev.biz/blog/future-machine-learning-trends-impact-business",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025"
+    ],
+    "answer": "There is no information provided about Large Language Models (LLM) latest update. However, the text mentions the rise of Small Language Models (SLM) as one of the trends in 2025, but it does not provide any details about LLM updates.",
+    "reward_score": 0.52,
+    "timestamp": "2025-11-11T04:01:15.759772"
+  },
+  {
+    "query": "LLM update in 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "In 2025, the industry size of Reinforcement Learning (RL) is assessed at $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming. RL remains promising but limited, dominating AI headlines with demonstrations of high intelligence and autonomy.",
+    "reward_score": 0.941,
+    "timestamp": "2025-11-11T04:04:07.268062"
+  },
+  {
+    "query": "LLM update in 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "In 2025, the industry size of Reinforcement Learning (RL) is assessed at $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming, indicating a promising but limited state of RL.",
+    "reward_score": 0.904,
+    "timestamp": "2025-11-11T04:04:25.891066"
+  },
+  {
+    "query": "LLM update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "In 2025, the industry size of Reinforcement Learning (RL) is assessed at $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming, indicating its promising yet limited state.",
+    "reward_score": 0.906,
+    "timestamp": "2025-11-11T04:07:09.491037"
+  },
+  {
+    "query": "LLM update 202",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "There is no information provided about \"LLM update 202\" in the given context. The context only discusses the state of Reinforcement Learning (RL) in 2025, its applications, and industry size. If you have a specific question about RL, I can try to answer it based on the provided context.",
+    "reward_score": 0.538,
+    "timestamp": "2025-11-11T04:07:48.371791"
+  },
+  {
+    "query": "LLM update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "As of 2025, the reinforcement learning (RL) industry is valued at over $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming. Despite its promise, RL remains limited, but continues to drive AI advancements.",
+    "reward_score": 0.9,
+    "timestamp": "2025-11-11T04:11:47.745365"
+  },
+  {
+    "query": "LLM update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "As of 2025, the reinforcement learning (RL) industry size is approximately $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming. RL remains promising, yet limited, and continues to dominate AI headlines with demonstrations of high intelligence and autonomy.",
+    "reward_score": 0.926,
+    "timestamp": "2025-11-11T04:13:56.694598"
+  },
+  {
+    "query": "LLM update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "As of 2025, the reinforcement learning (RL) industry is valued at over $122 billion, with applications in robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming, showcasing its potential and limitations in achieving high intelligence and autonomy.",
+    "reward_score": 0.892,
+    "timestamp": "2025-11-11T04:14:59.196343"
+  },
+  {
+    "query": "what is LLM latest update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "According to the data, the latest update on Reinforcement Learning (RL) in 2025 is that the industry size is assessed at $122 billion, with applications spanning robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming.",
+    "reward_score": 0.885,
+    "timestamp": "2025-11-11T04:44:01.511995"
+  },
+  {
+    "query": "what is LLM latest update 2025",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://medium.com/@fahey_james/the-state-of-reinforcement-learning-in-2025-foundations-frontiers-and-future-applications-c81ae556fc8a"
+    ],
+    "answer": "As of 2025, the industry size of Reinforcement Learning (RL) is assessed at $122 billion. RL has various applications, including robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming. However, its development remains both promising and limited.",
+    "reward_score": 0.882,
+    "timestamp": "2025-11-11T04:46:24.510459"
+  },
+  {
+    "query": "what is LLM latest update 2025",
+    "contexts": [
+      "https://bix-tech.com/llm-in-2025-how-large-language-models-will-redefine-business-technology-and-society/",
+      "https://prajnaaiwisdom.medium.com/llm-trends-2025-a-deep-dive-into-the-future-of-large-language-models-bff23aa7cdbc",
+      "https://prajnaaiwisdom.medium.com/llm-trends-2025-a-deep-dive-into-the-future-of-large-language-models-bff23aa7cdbc"
+    ],
+    "answer": "According to the data, the latest update on LLM (Large Language Models) in 2025 includes:\n\n1. Moving from experimental to essential in businesses.\n2. Ability to process information in multiple languages, enhancing global communication.\n3. Increased focus on data readiness, responsible AI, and strategic implementation.\n\nThese updates are expected to redefine the future of LLMs in 2025.",
+    "reward_score": 0.861,
+    "timestamp": "2025-11-11T04:51:09.874592"
+  },
+  {
+    "query": "why india is famous",
+    "contexts": [
+      "https://www.reddit.com/r/reinforcementlearning/comments/1ao4ie6/how_promising_is_reinforcement_learning_today/",
+      "https://www.forbes.com/sites/janakirammsv/2025/06/19/from-adoption-to-advantage-10-trends-shaping-enterprise-llms-in-2025/",
+      "https://www.reddit.com/r/PromptEngineering/comments/1ki9qwb/advances_in_llm_prompting_and_model_capabilities/"
+    ],
+    "answer": "The provided context does not offer information regarding India's fame. It focuses on advancements and trends in AI, specifically reinforcement learning and large language models, without mentioning India. Therefore, it is not possible to derive an answer to the question \"why India is famous\" from the given data.",
+    "reward_score": 0.237,
+    "timestamp": "2025-11-11T05:05:16.097502"
+  },
+  {
+    "query": "what is data science",
+    "contexts": [
+      "https://graphite-note.com/machine-learning-trends/",
+      "https://datarootlabs.com/blog/state-of-reinforcement-learning-2025",
+      "https://www.shakudo.io/blog/top-9-large-language-models"
+    ],
+    "answer": "Data science is not explicitly defined in the provided context, but based on the information given, it can be inferred that data science encompasses various fields, including machine learning and its subfields like reinforcement learning (RL). Data science likely involves the use of complex algorithms, large language models, and other techniques to analyze and interpret data, driving applications in areas such as robotics, autonomous vehicles, supply chain optimization, healthcare, and gaming. However, a precise definition of data science cannot be derived directly from the given context, as it focuses more on specific trends and applications within the machine learning and AI domains rather than providing a broad definition of data science itself.",
+    "reward_score": 0.317,
+    "timestamp": "2025-11-11T05:06:25.886329"
+  },
+  {
+    "query": "tell me about isro",
+    "contexts": [
+      "https://www.isro.gov.in/profile.html",
+      "https://www.iafastro.org/membership/all-members/indian-space-research-organisation-isro.html",
+      "https://www.britannica.com/topic/Indian-Space-Research-Organisation",
+      "https://www.shakudo.io/blog/top-9-large-language-models",
+      "https://deshpee.com/50-awesome-things-that-india-is-famous-for/"
+    ],
+    "answer": "The Indian Space Research Organisation (ISRO) is the country's premier space agency, established in 1969 with the objective of developing an independent Indian space program. Headquartered in Bengaluru, ISRO is dedicated to harnessing the benefits of outer space for the nation through the application of science, engineering, and technology. Its primary goal is to develop space technology and utilize it to contribute to various national tasks, making it a crucial organization for India's advancement in the space sector. With its founding, ISRO has been instrumental in promoting India's presence in space exploration and development, playing a significant role in the country's scientific and technological progress.",
+    "reward_score": 0.919,
+    "timestamp": "2025-11-11T05:19:18.816504"
+  },
+  {
+    "query": "tell me about react js latest update",
+    "contexts": [
+      "https://legacy.reactjs.org/versions/",
+      "https://www.reddit.com/r/reactjs/comments/1n4rh6n/whats_new_in_react_19_that_is_useful/",
+      "https://medium.com/@onix_react/whats-new-in-react-19-2-0-04b9019ceb27",
+      "https://react.dev/blog/2025/10/01/react-19-2",
+      "https://www.geeksforgeeks.org/reactjs/react-19-new-features-and-updates/"
+    ],
+    "answer": "The latest update to React JS is React 19.2.0, which introduces significant enhancements to refine component lifecycle management and optimize rendering performance. It also builds upon the features introduced in React 19, including the use of the `useTransition()` hook, which has been found to be particularly useful. Additionally, React 19 brings various new features and improvements to enhance the overall development experience, such as an updated React compiler that provides relief with memoization. The latest releases, including React 19.1 and React 19.2, demonstrate the ongoing efforts to improve and refine the React framework, with React 19.2 being the most recent release available on npm.",
+    "reward_score": 0.844,
+    "timestamp": "2025-11-11T05:23:22.962586"
   }
 ]

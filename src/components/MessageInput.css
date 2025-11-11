@@ -1,0 +1,72 @@
+.message-input-container {
+    padding: 1rem;
+    background-color: #0f172a;
+}
+
+.message-input-wrapper {
+    position: relative;
+}
+
+.message-input {
+    width: 100%;
+    padding: 1rem;
+    padding-right: 4rem; /* Increased padding to accommodate the send button */
+    border-radius: 9999px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    box-sizing: border-box; /* Ensure padding is included in the element's total width */
+}
+
+.message-input:focus {
+    outline: none;
+    ring: 2px;
+    border-color: #2563eb;
+}
+
+.message-input-actions {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    padding-right: 0.5rem; /* Adjusted padding */
+}
+
+.message-input-button {
+    padding: 0.5rem;
+    border-radius: 9999px;
+    border: none;
+    background-color: transparent;
+    color: #f8fafc;
+    cursor: pointer;
+}
+
+.message-input-button:hover {
+    background-color: #334155;
+}
+
+.send-button {
+    background-color: #2563eb;
+}
+
+.send-button:hover {
+    background-color: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+    .message-input {
+        padding: 0.75rem;
+        padding-right: 3.5rem;
+        font-size: 0.9rem;
+    }
+
+    .message-input-actions {
+        padding-right: 0.25rem;
+    }
+
+    .message-input-button {
+        padding: 0.4rem;
+    }
+}
