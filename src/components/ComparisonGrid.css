@@ -1,0 +1,47 @@
+.comparison-grid-container {
+    margin-top: 1.5rem;
+    border-top: 1px solid #374151;
+    padding-top: 1.5rem;
+}
+
+.grid-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+    text-align: center;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e293b;
+    color: #f8fafc;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+
+.comparison-table th {
+    background-color: #334155;
+    font-weight: 600;
+}
+
+.comparison-table .metric-name {
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.comparison-table tfoot {
+    border-top: 2px solid #374151;
+}
+
+.comparison-table .final-score-label {
+    font-weight: bold;
+    text-transform: uppercase;
+}

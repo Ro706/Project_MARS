@@ -1,0 +1,12 @@
+.comparison-graph-container {
+    margin-top: 1.5rem;
+    border-top: 1px solid #374151;
+    padding-top: 1.5rem;
+}
+
+.graph-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+    text-align: center;
+}
