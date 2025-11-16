@@ -16,7 +16,6 @@ const upload = multer();
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/rag", require("./routes/rag"));
-app.use("/api/chat", require("./routes/chat"));
 
 
 

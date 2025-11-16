@@ -24,10 +24,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <FiMessageSquare />
                     <span>Chat</span>
                 </Link>
-                <Link to="/history" className="nav-item" onClick={toggleSidebar}>
-                    <FiClock />
-                    <span>History</span>
-                </Link>
             </nav>
             <button onClick={handleLogout} className="logout-button">
                 <FiLogOut />

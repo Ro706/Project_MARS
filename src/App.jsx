@@ -4,8 +4,6 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ChatArea from './components/ChatArea';
 import MessageInput from './components/MessageInput';
-import ChatHistoryPage from './pages/ChatHistoryPage';
-import ChatDetailsPage from './pages/ChatDetailsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import './App.css';
@@ -72,8 +70,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/" element={token ? <ChatArea onSendMessage={onSendMessageRef} messages={currentChatMessages} setMessages={setCurrentChatMessages} /> : <Navigate to="/login" />} />
-          <Route path="/history" element={token ? <ChatHistoryPage /> : <Navigate to="/login" />} />
-          <Route path="/history/:id" element={token ? <ChatDetailsPage /> : <Navigate to="/login" />} />
         </Routes>
         {showMessageInput && <MessageInput onSendMessage={onSendMessageRef} />}
       </div>

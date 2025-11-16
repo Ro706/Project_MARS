@@ -6,15 +6,19 @@ const EvaluationDetails = ({ evaluation }) => {
         return <p>Evaluation data is not available.</p>;
     }
 
-    const { semantic_similarity, bert_score_rag_vs_llm, factual_accuracy, judge } = evaluation;
+    const { semantic_similarity_rag_llm, semantic_similarity_rag_query, bert_score_rag_vs_llm, factual_accuracy, judge } = evaluation;
 
     return (
         <div className="evaluation-details-container">
             <h3 className="details-title">Evaluation Details</h3>
             <div className="details-grid">
                 <div className="detail-item">
-                    <h4>Semantic Similarity</h4>
-                    <p>{semantic_similarity}</p>
+                    <h4>Semantic Similarity (RAG vs. LLM)</h4>
+                    <p>{semantic_similarity_rag_llm}</p>
+                </div>
+                <div className="detail-item">
+                    <h4>Semantic Similarity (RAG vs. Query)</h4>
+                    <p>{semantic_similarity_rag_query}</p>
                 </div>
                 <div className="detail-item">
                     <h4>BERT Score (RAG vs. LLM)</h4>
@@ -27,8 +31,20 @@ const EvaluationDetails = ({ evaluation }) => {
                     <p>RAG: {factual_accuracy.rag}</p>
                     <p>LLM: {factual_accuracy.llm}</p>
                 </div>
+                <div className="detail-item">
+                    <h4>RAG Answer Scores</h4>
+                    <p>Faithfulness: {judge.rag_scores.faithfulness}</p>
+                    <p>Completeness: {judge.rag_scores.completeness}</p>
+                    <p>Clarity: {judge.rag_scores.clarity}</p>
+                </div>
+                <div className="detail-item">
+                    <h4>LLM Answer Scores</h4>
+                    <p>Faithfulness: {judge.llm_scores.faithfulness}</p>
+                    <p>Completeness: {judge.llm_scores.completeness}</p>
+                    <p>Clarity: {judge.llm_scores.clarity}</p>
+                </div>
                 <div className="detail-item judge-evaluation">
-                    <h4>Judge Evaluation</h4>
+                    <h4>Judge Decision</h4>
                     <p><strong>Winner:</strong> {judge.winner}</p>
                     <p><strong>Justification:</strong> {judge.justification}</p>
                 </div>

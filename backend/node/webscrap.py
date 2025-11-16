@@ -7,8 +7,11 @@ import sys
 
 def scrape_webpage(url):
     """Scrape clean text content from a webpage."""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+    }
     try:
-        response = requests.get(url, timeout=15)
+        response = requests.get(url, timeout=15, headers=headers)
         if response.status_code != 200:
             print(f"Failed to retrieve {url} | Status code: {response.status_code}", file=sys.stderr)
             return ""

@@ -18,27 +18,6 @@ const ChatArea = ({ onSendMessage, messages, setMessages }) => {
         scrollToBottom();
     }, [messages]);
 
-    const saveChat = async (currentMessages) => {
-        const token = localStorage.getItem('token');
-        if (!token || currentMessages.length === 0) return;
-
-        const messagesToSave = currentMessages.map(msg => ({
-            ...msg,
-            timestamp: msg.timestamp ? new Date(msg.timestamp).toISOString() : new Date().toISOString()
-        }));
-
-        try {
-            await axios.post('http://localhost:5800/api/chat/save', { messages: messagesToSave }, {
-                headers: {
-                    'auth-token': token,
-                },
-            });
-            console.log('Chat saved successfully!');
-        } catch (error) {
-            console.error('Error saving chat:', error);
-        }
-    };
-
     const fetchComparisonResponse = async (query) => {
         setLoading(true);
         try {
@@ -72,14 +51,6 @@ const ChatArea = ({ onSendMessage, messages, setMessages }) => {
             };
         }
     }, [onSendMessage, setMessages]);
-
-    useEffect(() => {
-        return () => {
-            if (messages.length > 0) {
-                saveChat(messages);
-            }
-        };
-    }, [messages]);
 
     return (
         <div className="chat-area">

@@ -7,11 +7,14 @@ const ComparisonGraph = ({ evaluation }) => {
         return null;
     }
 
-    const { factual_accuracy, bert_score_rag_vs_llm } = evaluation;
+    const { factual_accuracy, bert_score_rag_vs_llm, judge } = evaluation;
 
     const data = [
         { name: 'Factual Accuracy', RAG: factual_accuracy.rag, LLM: factual_accuracy.llm },
         { name: 'BERT Score F1', RAG: bert_score_rag_vs_llm.f1, LLM: bert_score_rag_vs_llm.f1 },
+        { name: 'Faithfulness', RAG: judge.rag_scores.faithfulness, LLM: judge.llm_scores.faithfulness },
+        { name: 'Completeness', RAG: judge.rag_scores.completeness, LLM: judge.llm_scores.completeness },
+        { name: 'Clarity', RAG: judge.rag_scores.clarity, LLM: judge.llm_scores.clarity },
     ];
 
     return (

@@ -81,13 +81,11 @@ router.post('/compare', (req, res) => {
         return res.status(400).json({ error: 'Query is required' });
     }
 
-    const pythonProcess = spawn('python', [path.join(__dirname, '..', 'node', 'rag_query_compare.py')]);
+    // The RL agent in rag_query_compare.py will now choose top_k
+    const pythonProcess = spawn('python', [path.join(__dirname, '..', 'node', 'rag_query_compare.py'), query]);
 
     let stdoutBuffer = '';
     let stderr = '';
-
-    pythonProcess.stdin.write(query);
-    pythonProcess.stdin.end();
 
     pythonProcess.stdout.on('data', (data) => {
         stdoutBuffer += data.toString();

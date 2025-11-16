@@ -6,7 +6,7 @@ Project M.A.R.S. is an intelligent chatbot application that leverages Retrieval-
 
 General-purpose Large Language Models (LLMs) have a vast but static knowledge base. Their information is limited to what they were trained on, and they can sometimes provide outdated or incorrect information (a phenomenon known as "hallucination").
 
-M.A.R.S. overcomes these limitations by implementing a sophisticated RAG (Retrieval-Augmented Generation) pipeline and a comprehensive evaluation system:
+M.A.R.S. overcomes these limitations by implementing a sophisticated RAG (Retrieval-Augmented Generation) pipeline, a comprehensive evaluation system, and **Reinforcement Learning for continuous improvement**:
 
 1.  **Dynamic Information Retrieval (RAG Core):**
     *   When a user submits a query, M.A.R.S. first uses a search tool (Serper API) to find relevant web pages.
@@ -24,7 +24,11 @@ M.A.R.S. overcomes these limitations by implementing a sophisticated RAG (Retrie
         *   **Factual Accuracy (QA-based):** A Question-Answering (QA) model (e.g., RoBERTa-base-squad2) is used to assess if key facts from the original query are present and correctly addressed in each answer.
         *   **Judge Model Comparison:** A powerful LLM acts as an impartial judge, comparing both answers qualitatively, providing a justification, and declaring a "winner" based on overall quality, relevance, and completeness.
 
-This multi-faceted approach ensures that M.A.R.S. not only provides context-specific, up-to-date, and less hallucinatory answers but also offers transparency into the performance differences between RAG and pure LLM approaches.
+4.  **Reinforcement Learning (RL) for Optimization:**
+    *   The evaluation metrics are combined into a scalar reward signal.
+    *   A basic RL agent learns from these rewards, dynamically adjusting RAG parameters (e.g., the `top_k` value for document retrieval) to continuously improve the accuracy and quality of the RAG-generated answers over time.
+
+This multi-faceted approach ensures that M.A.R.S. not only provides context-specific, up-to-date, and less hallucinatory answers but also offers transparency into the performance differences between RAG and pure LLM approaches, and actively learns to optimize its own performance.
 
 ## Flow Diagram
 
@@ -42,25 +46,29 @@ Here is the detailed flow of how the application works:
           |--------------------------->| 2. Backend receives query                     |
           |                            |    and invokes `rag_query_compare.py`         |
           |                            |---------------------------------------------->| 3. `rag_query_compare.py` starts:
-          |                            |                                               |    a. **Dynamic Data Ingestion:**
+          |                            |                                               |    a. **RL Agent Action:**
+          |                            |                                               |       - `rl_agent.py` chooses optimal `top_k` for retrieval.
+          |                            |                                               |    b. **Dynamic Data Ingestion:**
           |                            |                                               |       - Uses `searchurl.py` (Serper API) to find relevant URLs.
           |                            |                                               |       - Uses `webscrap.py` to scrape content from found URLs.
           |                            |                                               |       - Embeds scraped content using `SentenceTransformer`.
           |                            |                                               |       - Upserts embeddings to Pinecone vector database.
-          |                            |                                               |    b. **RAG Answer Generation:**
-          |                            |                                               |       - Retrieves most relevant documents from Pinecone based on query.
+          |                            |                                               |    c. **RAG Answer Generation:**
+          |                            |                                               |       - Retrieves `top_k` relevant documents from Pinecone based on query.
           |                            |                                               |       - Constructs a prompt with retrieved context.
           |                            |                                               |       - Sends prompt to Groq LLM (`llama-3.3-70b-versatile`) for RAG answer.
-          |                            |                                               |    c. **Pure LLM Answer Generation:**
+          |                            |                                               |    d. **Pure LLM Answer Generation:**
           |                            |                                               |       - Sends original query directly to Groq LLM (`llama-3.3-70b-versatile`) for a non-RAG answer.
-          |                            |                                               |    d. **Comprehensive Evaluation:**
+          |                            |                                               |    e. **Comprehensive Evaluation:**
           |                            |                                               |       - Calls `comprehensive_evaluate.py` with query, RAG answer, and LLM answer.
           |                            |                                               |       - `comprehensive_evaluate.py` calculates:
           |                            |                                               |         - Semantic Similarity (Sentence-Transformers)
           |                            |                                               |         - BERTScore (between RAG and LLM answers)
           |                            |                                               |         - Factual Accuracy (QA model, e.g., RoBERTa-base-squad2)
           |                            |                                               |         - Judge Model Evaluation (Groq LLM for qualitative comparison & winner)
-          |                            |                                               |       - Returns all evaluation scores and winner.
+          |                            |                                               |         - Calculates a scalar `rag_reward`.
+          |                            |                                               |    f. **RL Agent Learning:**
+          |                            |                                               |       - `rl_agent.py` learns from the `rag_reward` to update its policy.
           |                            |                                               |
           |<---------------------------| 4. `rag_query_compare.py` returns a single    |
           |                            |    JSON object containing RAG answer, LLM     |
@@ -80,10 +88,11 @@ Here is the detailed flow of how the application works:
 ## Key Features
 
 *   **User Authentication:** Secure user login and registration using JWT.
-*   **Chat History:** Saves your conversations for future reference.
 *   **RAG vs. LLM Comparison:** The core feature that provides a side-by-side comparison of answers from a RAG model and a standard LLM.
 *   **Comprehensive Evaluation:** A sophisticated evaluation pipeline that uses multiple metrics to assess the quality of the generated answers.
+*   **Reinforcement Learning Integration:** A basic RL agent learns from evaluation rewards to dynamically optimize RAG parameters (e.g., `top_k` for retrieval), aiming to improve accuracy over time.
 *   **Visual Comparison:** A graph to visually compare the performance of the two models.
+*   **Professional UI/UX:** Redesigned login and signup pages for a modern and professional user experience.
 *   **Responsive UI:** A clean and simple chat interface.
 
 ## Technologies Used
@@ -103,7 +112,6 @@ Here is the detailed flow of how the application works:
 │   ├── middleware
 │   │   └── fetchuser.js
 │   ├── models
-│   │   ├── Chat.js
 │   │   ├── Score.js
 │   │   └── User.js
 │   ├── node
@@ -114,11 +122,11 @@ Here is the detailed flow of how the application works:
 │   │   ├── reward_memory.json
 │   │   ├── scraped_data.json
 │   │   ├── searchurl.py
-│   │   └── webscrap.py
+│   │   ├── webscrap.py
+│   │   └── rl_agent.py
 │   ├── package.json
 │   └── routes
 │       ├── auth.js
-│       ├── chat.js
 │       └── rag.js
 ├── public
 │   └── vite.svg
@@ -136,8 +144,6 @@ Here is the detailed flow of how the application works:
 │   │   ├── Shimmer.jsx
 │   │   └── Sidebar.jsx
 │   ├── pages
-│   │   ├── ChatDetailsPage.jsx
-│   │   ├── ChatHistoryPage.jsx
 │   │   ├── LoginPage.jsx
 │   │   └── SignupPage.jsx
 │   ├── App.css
@@ -157,23 +163,38 @@ Here is the detailed flow of how the application works:
 *   `POST /api/auth/signup`: Create a new user.
 *   `POST /api/auth/login`: Login a user.
 *   `GET /api/auth/getuser`: Get the logged-in user's data.
-*   `POST /api/chat/save`: Save a chat conversation.
-*   `GET /api/chat/history`: Get the chat history for the logged-in user.
-*   `GET /api/chat/:id`: Get a specific chat conversation.
-*   `DELETE /api/chat/:id`: Delete a specific chat conversation.
 *   `POST /api/rag/query`: Get a response from the RAG model (not used in the current UI).
 *   `POST /api/rag/compare`: Get a comparison between the RAG and LLM models.
 
 ## Python Scripts
 
-*   `rag_query_compare.py`: The main script that orchestrates the comparison pipeline. It takes a user query, generates RAG and LLM answers, and calls the evaluation script.
-*   `comprehensive_evaluate.py`: Performs a comprehensive evaluation of the two answers using various metrics.
+*   `rag_query_compare.py`: The main script that orchestrates the comparison pipeline. It takes a user query, generates RAG and LLM answers, and calls the evaluation script. It also interacts with the `rl_agent.py` to choose optimal RAG parameters and learn from the results.
+*   `comprehensive_evaluate.py`: Performs a comprehensive evaluation of the two answers using various metrics and calculates a scalar reward for the RAG answer.
+*   `rl_agent.py`: Implements a basic Reinforcement Learning agent that learns from past evaluation rewards to dynamically select optimal RAG parameters (e.g., `top_k` for document retrieval).
 *   `rag_query.py`: A script for querying the RAG model (not used in the current comparison pipeline).
 *   `embed_and_upload.py`: A utility script to embed and upload data to the Pinecone vector database.
 *   `searchurl.py`: A utility script to search for URLs based on a query using the Serper API.
 *   `webscrap.py`: A utility script to scrape the content of a webpage.
 
 ## How to Run the Project
+
+### Recent Updates and Improvements
+
+This project has undergone several significant updates and improvements:
+
+*   **Reinforcement Learning (RL) Integration:** A foundational RL system has been integrated. This includes:
+    *   A comprehensive reward function in `comprehensive_evaluate.py` that calculates a scalar reward for RAG answers based on faithfulness, factual accuracy, completeness, clarity, and semantic similarity to the query.
+    *   An action space defined by the `top_k` parameter for Pinecone retrieval.
+    *   A basic `rl_agent.py` that learns from past rewards to dynamically choose `top_k` values, aiming to optimize RAG performance over time.
+*   **UI/UX Enhancements:**
+    *   The Login and Signup pages (`LoginPage.jsx`, `SignupPage.jsx`) have been professionally redesigned with a modern, dark-themed, and responsive interface.
+*   **Feature Removal:**
+    *   The entire chat history feature (frontend pages, backend routes, and database models) has been completely removed to streamline the application.
+*   **Bug Fixes and Stability:**
+    *   Resolved multiple `NameError` issues in Python scripts (`comprehensive_evaluate.py`) to ensure stable execution.
+    *   Implemented user-agent headers in `webscrap.py` to improve web scraping success rates and mitigate 403 Forbidden errors (though some sites may still block access).
+    *   Fixed malformed JSON output from `rag_query_compare.py` by ensuring proper flushing of `stdout`, resolving parsing errors in the Node.js backend.
+    *   Addressed chat saving validation errors by updating the backend `MessageSchema` and frontend `ChatArea.jsx` to correctly handle comparison messages (though chat saving is now removed with the history feature).
 
 ### Prerequisites
 
