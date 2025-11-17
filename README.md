@@ -32,6 +32,30 @@ This multi-faceted approach ensures that M.A.R.S. not only provides context-spec
 
 ## Flow Diagram
 
+```mermaid
+flowchart TD
+
+A[User] --> B[React UI]
+B --> C[Node.js Backend]
+
+C --> D[rag_query_compare.py]
+
+D --> E[RAG Answer]
+D --> F[LLM Answer]
+
+D --> G[RL Agent]
+G --> H[Pinecone Retrieval]
+
+E --> I[Evaluation Engine: Semantic Similarity, BERTScore, QA Accuracy, LLM Judge]
+F --> I
+
+I --> J[Final Comparison Output]
+
+J --> B
+
+
+```
+
 Here is the detailed flow of how the application works:
 
 ```
